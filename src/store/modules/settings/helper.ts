@@ -3,16 +3,19 @@ import { ss } from '@/utils/storage'
 const LOCAL_NAME = 'settingsStorage'
 
 export interface SettingsState {
-  systemMessage: string
-  temperature: number
-  top_p: number
+  // systemMessage: string
+  temperature: number | null
+  top_p: number | null
+  top_k: number | null
+  // ... other settings
 }
 
 export function defaultSetting(): SettingsState {
   return {
-    systemMessage: 'You are ChatGPT, a large language model trained by OpenAI. Follow the user\'s instructions carefully. Respond using markdown.',
-    temperature: 0.8,
-    top_p: 1,
+    temperature: null,
+    top_p: null,
+    top_k: null,
+    // ... other default settings
   }
 }
 

@@ -10,12 +10,12 @@ function setupPlugins(env: ImportMetaEnv): PluginOption[] {
     env.VITE_GLOB_APP_PWA === 'true' && VitePWA({
       injectRegister: 'auto',
       manifest: {
-        name: 'chatGPT',
-        short_name: 'chatGPT',
-        icons: [
-          { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
-          { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
-        ],
+        name: 'InfiniLM',
+        short_name: 'InfiniLM',
+        // icons: [
+        //   { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
+        //   { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
+        // ],
       },
     }),
   ]
@@ -37,7 +37,7 @@ export default defineConfig((env) => {
       open: false,
       proxy: {
         '/api': {
-          target: viteEnv.VITE_APP_API_BASE_URL,
+          target: 'http://localhost:9001',
           changeOrigin: true, // 允许跨域
           rewrite: path => path.replace('/api/', '/'),
         },

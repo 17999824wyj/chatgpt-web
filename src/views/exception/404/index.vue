@@ -16,7 +16,7 @@ function goHome() {
         Sorry, page not found!
       </h1>
       <p class="text-base text-slate-500 dark:text-neutral-400">
-        Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL? Be sure to check your spelling.
+        找不到对应的资源，请检查您的Url是否拼写错误
       </p>
       <div class="flex items-center justify-center text-center">
         <div class="w-[300px]">
