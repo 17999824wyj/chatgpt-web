@@ -2,8 +2,8 @@
   "name": "chatgpt-web",
   "version": "2.11.1",
   "private": false,
-  "description": "ChatGPT Web",
-  "author": "ChenZhaoYu <chenzhaoyu1994@gmail.com>",
+  "description": "Learning-LM-rust",
+  "author": "Wangyijia <wyj11281212@163.com>",
   "keywords": [
     "chatgpt-web",
     "chatgpt",
