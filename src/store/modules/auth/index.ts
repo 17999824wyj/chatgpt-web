@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
 import { getToken, removeToken, setToken } from './helper'
 import { store } from '@/store/helper'
-import { fetchSession } from '@/api'
+// import { fetchSession } from '@/api'
 
 interface SessionResponse {
   auth: boolean
-  model: 'ChatGPTAPI' | 'ChatGPTUnofficialProxyAPI'
+  model: 'InfiniLM'
 }
 
 export interface AuthState {
@@ -20,15 +20,19 @@ export const useAuthStore = defineStore('auth-store', {
   }),
 
   getters: {
-    isChatGPTAPI(state): boolean {
-      return state.session?.model === 'ChatGPTAPI'
+    isInfiniLM(state): boolean {
+      return state.session?.model === 'InfiniLM'
     },
   },
 
   actions: {
     async getSession() {
       try {
-        const { data } = await fetchSession<SessionResponse>()
+        const data = {
+          auth: true,
+          model: 'InfiniLM',
+        }
+        // const data = fetchSession<SessionResponse>();
         this.session = { ...data }
         return Promise.resolve(data)
       }

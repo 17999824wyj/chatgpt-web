@@ -57,7 +57,7 @@ function handleSubmit() {
 }
 
 async function onConversation() {
-  let message = prompt.value
+  const message = prompt.value
 
   if (loading.value)
     return
@@ -104,7 +104,7 @@ async function onConversation() {
   scrollToBottom()
 
   try {
-    let lastText = ''
+    const lastText = ''
     const fetchChatAPIOnce = async () => {
       await fetchChatAPIProcess<Chat.ConversationResponse>({
         prompt: message,
@@ -113,39 +113,56 @@ async function onConversation() {
         onDownloadProgress: ({ event }) => {
           const xhr = event.target
           const { responseText } = xhr
-          // Always process the final line
-          const lastIndex = responseText.lastIndexOf('\n', responseText.length - 2)
-          let chunk = responseText
-          if (lastIndex !== -1)
-            chunk = responseText.substring(lastIndex)
-          try {
-            const data = JSON.parse(chunk)
+
+          // 累积数据块直到遇到换行符
+          let accumulatedText = ''
+          let lines = responseText.split('\n')
+          if (lines.length > 1) {
+          // 保留最后一行，因为可能是不完整的行
+            const lastLine = lines.pop()
+            accumulatedText = lines.join('\n') // 所有完整的行
+            lines = lastLine // 保留不完整的行供下次累积
+          }
+          else {
+          // 如果只有一行，那么它可能是不完整的
+            accumulatedText = lines[0]
+          }
+
+          // 更新message
+          updateChat(
+            +uuid,
+            dataSources.value.length - 1,
+            {
+              dateTime: new Date().toLocaleString(),
+              text: lastText + accumulatedText, // 累积文本
+              inversion: false,
+              error: false,
+              loading: true,
+              conversationOptions: null, // 假设文件流不包含会话选项
+              requestOptions: { prompt: message, options: { ...options } },
+            },
+          )
+
+          // 当传输完成时，处理最后一行
+          if (xhr.readyState === 4) {
+          // 这里假设最后一行是完整的，或者您可以在这里处理任何剩余的不完整行
             updateChat(
               +uuid,
               dataSources.value.length - 1,
               {
                 dateTime: new Date().toLocaleString(),
-                text: lastText + (data.text ?? ''),
+                text: lastText + accumulatedText + lines, // 渲染最后一行
                 inversion: false,
                 error: false,
-                loading: true,
-                conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
+                loading: false,
+                conversationOptions: null, // 假设文件流不包含会话选项
                 requestOptions: { prompt: message, options: { ...options } },
               },
             )
-
-            if (openLongReply && data.detail.choices[0].finish_reason === 'length') {
-              options.parentMessageId = data.id
-              lastText = data.text
-              message = ''
-              return fetchChatAPIOnce()
-            }
-
-            scrollToBottomIfAtBottom()
           }
-          catch (error) {
-            //
-          }
+
+          // 每次有新数据时滚动到底部
+          scrollToBottomIfAtBottom()
         },
       })
       updateChatSome(+uuid, dataSources.value.length - 1, { loading: false })

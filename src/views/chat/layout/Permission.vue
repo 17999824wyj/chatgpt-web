@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import { computed, ref } from 'vue'
 import { NButton, NInput, NModal, useMessage } from 'naive-ui'
-import { fetchVerify } from '@/api'
+// import { fetchVerify } from '@/api'
 import { useAuthStore } from '@/store'
 import Icon403 from '@/icons/403.vue'
 
@@ -28,7 +28,7 @@ async function handleVerify() {
 
   try {
     loading.value = true
-    await fetchVerify(secretKey)
+    // await fetchVerify(secretKey)
     authStore.setToken(secretKey)
     ms.success('success')
     window.location.reload()
